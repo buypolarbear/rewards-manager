@@ -125,7 +125,7 @@ public class RewardsTokenGenerator implements Iterable<RewardToken> {
 
 		// Create a buffer large enough to store the random bytes + timestamp
 		byte[] buffer = new byte[messageSize];
-		System.arraycopy(nonce, 0, buffer, 0, 0);
+		System.arraycopy(nonce, 0, buffer, 0, nonce.length);
 		
 		messageSize = nonce.length;
 		

@@ -13,10 +13,12 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -39,7 +41,7 @@ public class PDFGenerator {
 
 	public static final String SECRET_PROPERTY = "secret";
 	
-	public static final int DEFAULT_SECRET_SIZE = 20;
+	public static final int DEFAULT_SECRET_SIZE = 60;
 	
 	public static final String DEFAULT_CONFIG_FILENAME = "generator.properties";
 	
@@ -58,23 +60,23 @@ public class PDFGenerator {
 			DocumentException {
 		DateFormat df = new SimpleDateFormat("YYYYMMdd_HHmmSS");
 		String tstamp = df.format(new Date());
-		generateCodes(numPages);
-		createPdf(new FileOutputStream(tstamp+"_codes.pdf"));
+		List<RewardToken> newTokens = generateCodes(numPages);
+		createPdf(new FileOutputStream(tstamp+"_codes.pdf"), newTokens);
 	}
 	
-	private void generateCodes(int numPages) {
+	private List<RewardToken> generateCodes(int numPages) {
 		Iterator<RewardToken> it = generator.iterator();
-		Map<EncodeHintType, Object> hints = new HashMap<>();
-		hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);
-
+		List<RewardToken> newTokens = new ArrayList<>();
 		int quantity = 14 * 2 * numPages;
 		int i = 0;
 		while (i < quantity) {
 			RewardToken token = it.next();
-			if (tokens.add(token)) {				
+			if (tokens.add(token)) {
+				newTokens.add(token);
 				i++;
 			}
-		}		
+		}
+		return newTokens;
 	}
 
 	public void save(OutputStream out) throws IOException {
@@ -103,7 +105,7 @@ public class PDFGenerator {
 	 * @throws DocumentException
 	 * @throws IOException
 	 */
-	public void createPdf(OutputStream out) throws IOException,
+	public void createPdf(OutputStream out, List<RewardToken> tokens) throws IOException,
 			DocumentException {
 		// step 1
 		Document document = new Document(PageSize.A4);
