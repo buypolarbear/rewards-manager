@@ -9,4 +9,5 @@ target/
 # Application files
 *.pdf
 *.csv
+*.txt
 generator.properties
