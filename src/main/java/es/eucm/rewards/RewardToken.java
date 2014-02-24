@@ -3,7 +3,7 @@ package es.eucm.rewards;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
-import org.apache.commons.codec.binary.QRCodeCompatibleBase32Encoder;
+import org.apache.commons.codec.binary.Base32;
 
 public class RewardToken implements Comparable<RewardToken> {
 	
@@ -149,7 +149,7 @@ public class RewardToken implements Comparable<RewardToken> {
 	@Override
 	public String toString() {
 		byte[] tstampArray = ByteBuffer.allocate(8).putLong(tstamp).array();
-		QRCodeCompatibleBase32Encoder encoder = new QRCodeCompatibleBase32Encoder(0);
+		Base32 encoder = new Base32(DEFAULT_TOKEN_SEPARATOR);
 		return new StringBuilder().append(encoder.encodeToString(this.nonce))
 				.append(separator).append(encoder.encodeToString(tstampArray))
 				.append(separator).append(this.algorithm)
@@ -166,7 +166,7 @@ public class RewardToken implements Comparable<RewardToken> {
 		if (chunks.length < 4) {
 			throw new IllegalArgumentException("string has not a valid format: <nonce>"+separator+"<tstamp>"+separator+"<hash algorithm>"+separator+"<hmac hash>");
 		}
-		QRCodeCompatibleBase32Encoder decoder = new QRCodeCompatibleBase32Encoder(0);
+		Base32 decoder = new Base32(DEFAULT_TOKEN_SEPARATOR);
 		byte[] nonce = decoder.decode(chunks[0]);
 		byte[] tstamp = decoder.decode(chunks[1]);
 		HashAlgorithmEnum algorithm = HashAlgorithmEnum.valueOf(chunks[2]);
