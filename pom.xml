@@ -7,8 +7,11 @@
 
 	<repositories>
 		<repository>
-			<id>commons-codec-interim-repo</id>
-			<url>https://raw.github.com/imartinezortiz/commons-codec/mvn-repo/</url>
+			<id>Apache Snapshots repository</id>
+			<url>http://repository.apache.org/snapshots/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
 		</repository>
 	</repositories>
 	<properties>
